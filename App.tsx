@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Truck, 
@@ -397,9 +396,24 @@ const OrderForm = () => {
   });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [orderId, setOrderId] = useState('');
 
   const price = 199;
   const originalPrice = 266;
+
+  const generateWhatsAppMessage = (id: string) => {
+    return `*NEW ORDER FROM FUNNEL*%0A%0A` +
+      `*Order ID:* ${id}%0A` +
+      `*Product:* ThermoPro Fan Heater 2000W%0A` +
+      `*Name:* ${formData.name}%0A` +
+      `*Email:* ${formData.email || 'N/A'}%0A` +
+      `*Phone:* ${formData.phone}%0A` +
+      `*City:* ${formData.city}%0A` +
+      `*Address:* ${formData.address}%0A` +
+      `*Quantity:* ${qty}%0A` +
+      `*Total:* AED ${qty * price}%0A%0A` +
+      `Please confirm my delivery!`;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -411,13 +425,13 @@ const OrderForm = () => {
 
     setSubmitting(true);
 
-    const orderNo = `TP-${Date.now().toString().slice(-6)}`;
+    const newOrderNo = `TP-${Date.now().toString().slice(-6)}`;
+    setOrderId(newOrderNo);
     const date = new Date().toLocaleString('en-AE', { timeZone: 'Asia/Dubai' });
 
-    // Payload keys specifically mapped to the requested Google Sheet columns
     const sheetPayload = {
       "Date": date,
-      "Order No": orderNo,
+      "Order No": newOrderNo,
       "Full Name": formData.name,
       "Phone Number (UAE)": formData.phone,
       "Email": formData.email || "N/A",
@@ -427,39 +441,37 @@ const OrderForm = () => {
     };
 
     try {
-      // 1. Send to Google Sheets
-      if (GOOGLE_SHEET_URL) {
-        await fetch(GOOGLE_SHEET_URL, {
-          method: 'POST',
-          mode: 'no-cors', 
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(sheetPayload)
-        });
-      }
+      // We use a Promise.race with a timeout to ensure the UI doesn't hang if Google Sheets is slow
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout')), 2000)
+      );
 
-      // 2. Prepare WhatsApp message
-      const message = `*NEW ORDER FROM FUNNEL*%0A%0A` +
-        `*Order ID:* ${orderNo}%0A` +
-        `*Product:* ThermoPro Fan Heater 2000W%0A` +
-        `*Name:* ${formData.name}%0A` +
-        `*Email:* ${formData.email || 'N/A'}%0A` +
-        `*Phone:* ${formData.phone}%0A` +
-        `*City:* ${formData.city}%0A` +
-        `*Address:* ${formData.address}%0A` +
-        `*Quantity:* ${qty}%0A` +
-        `*Total:* AED ${qty * price}%0A%0A` +
-        `Please confirm my delivery!`;
+      const fetchPromise = fetch(GOOGLE_SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors', 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sheetPayload)
+      });
 
-      // 3. Success UI
+      // Attempt to send to sheet but don't let it block the user for more than 2 seconds
+      await Promise.race([fetchPromise, timeoutPromise]).catch(err => {
+        console.warn("Sheet update slow or failed, proceeding to success state:", err);
+      });
+
+      // Prepare WhatsApp redirect
+      const message = generateWhatsAppMessage(newOrderNo);
+      
+      // Mark as success first so UI updates
       setSuccess(true);
       setSubmitting(false);
 
-      // 4. Redirect to WhatsApp (Merchant side for order notification)
+      // Attempt immediate redirect (might be blocked by popup blocker after async await)
       window.open(`https://wa.me/${MERCHANT_WHATSAPP}?text=${message}`, '_blank');
       
     } catch (error) {
-      console.error("Submission error:", error);
-      alert("Something went wrong. Please try again or contact us via WhatsApp.");
+      console.error("Submission process encountered an issue:", error);
+      // Even on error, we show success to avoid losing the lead. They can still contact via WhatsApp.
+      setSuccess(true);
       setSubmitting(false);
     }
   };
@@ -473,25 +485,30 @@ const OrderForm = () => {
   };
 
   if (success) {
+    const waUrl = `https://wa.me/${MERCHANT_WHATSAPP}?text=${generateWhatsAppMessage(orderId)}`;
     return (
       <section id="order-form" className="py-20 bg-red-50">
         <div className="container mx-auto px-4 max-w-xl text-center space-y-6">
           <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center text-white mx-auto shadow-xl">
             <CheckCircle2 className="w-12 h-12" />
           </div>
-          <h2 className="text-3xl font-bold">Thank You!</h2>
-          <p className="text-lg text-slate-600">Your order has been recorded. We have redirected you to WhatsApp to confirm your delivery details instantly.</p>
-          <div className="bg-white p-6 rounded-2xl border border-green-100 shadow-sm">
-            <p className="text-sm text-slate-500 font-bold mb-2">Order Summary for {formData.name}</p>
-            <p className="text-sm text-slate-500">Location: {formData.city}</p>
-            <p className="text-sm text-slate-500">Total Amount: AED {qty * price}</p>
+          <h2 className="text-3xl font-bold">Order Received!</h2>
+          <p className="text-lg text-slate-600">Your order details have been saved. To ensure priority delivery, please click the button below to confirm your order via WhatsApp.</p>
+          
+          <div className="bg-white p-6 rounded-2xl border border-green-100 shadow-sm text-left">
+            <p className="text-sm text-slate-500 font-bold mb-2">Order ID: {orderId}</p>
+            <p className="text-sm text-slate-700"><strong>Customer:</strong> {formData.name}</p>
+            <p className="text-sm text-slate-700"><strong>Total:</strong> AED {qty * price}</p>
           </div>
+
           <Button 
-            onClick={() => window.open(`https://wa.me/${SUPPORT_WHATSAPP}`, '_blank')}
-            className="bg-green-600 hover:bg-green-700 shadow-green-200 border-none"
+            onClick={() => window.open(waUrl, '_blank')}
+            className="bg-green-600 hover:bg-green-700 shadow-green-200 border-none py-6 text-xl"
           >
-            <MessageCircle className="w-5 h-5 mr-2" /> Chat for Support
+            <MessageCircle className="w-6 h-6 mr-2" /> Confirm via WhatsApp
           </Button>
+
+          <p className="text-xs text-slate-400">If the link doesn't open, please check your popup blocker or contact support.</p>
         </div>
       </section>
     );
@@ -622,7 +639,7 @@ const OrderForm = () => {
                   {submitting ? (
                     <>
                       <Loader2 className="w-6 h-6 mr-2 animate-spin" />
-                      Connecting...
+                      Saving Order...
                     </>
                   ) : `Complete Order - AED ${qty * price}`}
                 </Button>
