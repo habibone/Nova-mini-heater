@@ -29,7 +29,8 @@ import {
 import { UAE_CITIES } from './types';
 
 // --- CONFIGURATION ---
-const GOOGLE_SHEET_URL: string = "https://script.google.com/macros/s/AKfycbzuJjwHirbLvkbzry1Qq5alO1sinpU_R-sYDdOYKLVEz-rU9oq_ypBDMlfxmV8u7TCi/exec"; 
+// Updated to the latest Google Apps Script URL provided by the user
+const GOOGLE_SHEET_URL: string = "https://script.google.com/macros/s/AKfycbz8l58isRURQvKqB1pkfOhIvmr-_kluf9RzMG2LxUzuhk5HTiNtKUQTUdaT45ygvu5_/exec"; 
 const MERCHANT_WHATSAPP = "923703730897"; // For order fulfillment
 const SUPPORT_WHATSAPP = "971568472271"; // For general support in footer
 
@@ -429,6 +430,7 @@ const OrderForm = () => {
     setOrderId(newOrderNo);
     const date = new Date().toLocaleString('en-AE', { timeZone: 'Asia/Dubai' });
 
+    // Payload keys specifically mapped to the requested Google Sheet columns
     const sheetPayload = {
       "Date": date,
       "Order No": newOrderNo,
@@ -443,7 +445,7 @@ const OrderForm = () => {
     try {
       // We use a Promise.race with a timeout to ensure the UI doesn't hang if Google Sheets is slow
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Timeout')), 2000)
+        setTimeout(() => reject(new Error('Timeout')), 2500)
       );
 
       const fetchPromise = fetch(GOOGLE_SHEET_URL, {
@@ -453,7 +455,7 @@ const OrderForm = () => {
         body: JSON.stringify(sheetPayload)
       });
 
-      // Attempt to send to sheet but don't let it block the user for more than 2 seconds
+      // Attempt to send to sheet but don't let it block the user for more than 2.5 seconds
       await Promise.race([fetchPromise, timeoutPromise]).catch(err => {
         console.warn("Sheet update slow or failed, proceeding to success state:", err);
       });
@@ -470,7 +472,6 @@ const OrderForm = () => {
       
     } catch (error) {
       console.error("Submission process encountered an issue:", error);
-      // Even on error, we show success to avoid losing the lead. They can still contact via WhatsApp.
       setSuccess(true);
       setSubmitting(false);
     }
