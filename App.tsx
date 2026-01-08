@@ -416,11 +416,21 @@ const OrderForm = () => {
       `Please confirm my delivery!`;
   };
 
+  const validatePhone = (phone: string) => {
+    // Standard UAE cleaning: remove prefix and spaces
+    const clean = phone.replace('+971', '').replace(/\s/g, '').trim();
+    // UAE numbers usually start with 5X for mobile or other area codes, 7-10 digits standard
+    const phoneRegex = /^[0-9]{7,10}$/;
+    return phoneRegex.test(clean);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanPhone = formData.phone.replace('+971', '').trim();
-    if (!cleanPhone || cleanPhone.length < 7) {
-      alert("Please enter a valid phone number.");
+    
+    // Improved Validation Logic
+    const isPhoneValid = validatePhone(formData.phone);
+    if (!isPhoneValid) {
+      alert("❌ Invalid Phone Number!\nPlease enter a valid UAE phone number (e.g., 501234567).\nMake sure it has 7 to 10 digits after the country code.");
       return;
     }
 
@@ -437,7 +447,6 @@ const OrderForm = () => {
       minute: '2-digit'
     });
 
-    // Match exact keys from your Google Apps Script requirement
     const sheetPayload = {
       "Date": date,
       "Order No": newOrderNo,
@@ -450,8 +459,6 @@ const OrderForm = () => {
     };
 
     try {
-      // Use no-cors and plain text to ensure Google Script receives the data safely
-      // Some browsers block JSON content-type in no-cors mode, so we send it raw
       await fetch(GOOGLE_SHEET_URL, {
         method: 'POST',
         mode: 'no-cors', 
@@ -461,18 +468,13 @@ const OrderForm = () => {
         body: JSON.stringify(sheetPayload)
       });
 
-      // Prepare WhatsApp redirect
       const message = generateWhatsAppMessage(newOrderNo);
-      
       setSuccess(true);
       setSubmitting(false);
-
-      // Attempt immediate redirect
       window.open(`https://wa.me/${MERCHANT_WHATSAPP}?text=${message}`, '_blank');
       
     } catch (error) {
       console.error("Submission error:", error);
-      // Fail gracefully: show success anyway so they can still confirm via WhatsApp
       setSuccess(true);
       setSubmitting(false);
     }
@@ -480,8 +482,15 @@ const OrderForm = () => {
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
+    // Enforce prefix but allow user to edit numbers after it
     if (!value.startsWith('+971 ')) {
-      value = '+971 ' + value.replace('+971', '').trim();
+      const numericPart = value.replace('+971', '').replace(/\D/g, '').trim();
+      value = '+971 ' + numericPart;
+    } else {
+      // Allow only digits and spaces after the prefix
+      const prefix = '+971 ';
+      const suffix = value.substring(prefix.length).replace(/\D/g, '');
+      value = prefix + suffix;
     }
     setFormData({...formData, phone: value});
   };
@@ -589,11 +598,16 @@ const OrderForm = () => {
                     required
                     type="tel" 
                     placeholder="5X XXX XXXX" 
-                    className="w-full pl-12 pr-5 py-4 rounded-xl border border-gray-200 bg-white text-slate-900 focus:border-red-600 focus:ring-4 focus:ring-red-50 outline-none transition-all font-medium placeholder:text-gray-400 shadow-sm"
+                    className={`w-full pl-12 pr-5 py-4 rounded-xl border ${formData.phone.length > 5 && !validatePhone(formData.phone) ? 'border-red-300 bg-red-50/10' : 'border-gray-200 bg-white'} text-slate-900 focus:border-red-600 focus:ring-4 focus:ring-red-50 outline-none transition-all font-medium placeholder:text-gray-400 shadow-sm`}
                     value={formData.phone}
                     onChange={handlePhoneChange}
                   />
                 </div>
+                {formData.phone.length > 5 && !validatePhone(formData.phone) && (
+                   <p className="text-[10px] text-red-500 font-bold uppercase mt-1 ml-1 flex items-center gap-1">
+                     <AlertCircle className="w-3 h-3" /> Enter 7-10 digits after prefix
+                   </p>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -904,7 +918,7 @@ export default function App() {
               <span className="w-6 h-6 bg-red-50 text-red-600 flex items-center justify-center rounded-full text-xs">7</span>
               Incorrect Address
             </h4>
-            <p className="pl-8">THERMOPRO is not responsible for delays or failed deliveries due to incorrect address details provided by the customer.</p>
+            <p className="pl-8">THERMOPRO is not responsible for delays or failed deliveries due to the incorrect address details provided by the customer.</p>
           </div>
         </div>
       </Modal>
