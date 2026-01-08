@@ -29,9 +29,9 @@ import {
 import { UAE_CITIES } from './types';
 
 // --- CONFIGURATION ---
-// Add explicit string type to allow comparison with placeholder strings in TypeScript
 const GOOGLE_SHEET_URL: string = "https://script.google.com/macros/s/AKfycbwNhKOUGdQKIraYpsoXig6SMYOAIez4_PqC7BM0Y_JDu5cDaRqmZvpTfWvwkkNQkap_/exec"; 
-const MERCHANT_WHATSAPP = "971568472271"; // Your WhatsApp number in international format
+const MERCHANT_WHATSAPP = "923703730897"; // For order fulfillment
+const SUPPORT_WHATSAPP = "971568472271"; // For general support in footer
 
 // --- Utility Components ---
 
@@ -418,10 +418,10 @@ const OrderForm = () => {
 
     try {
       // 1. Send to Google Sheets (Optional but recommended for records)
-      if (GOOGLE_SHEET_URL && GOOGLE_SHEET_URL !== "YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE") {
+      if (GOOGLE_SHEET_URL) {
         await fetch(GOOGLE_SHEET_URL, {
           method: 'POST',
-          mode: 'no-cors', // Apps Script often requires no-cors for simple triggers
+          mode: 'no-cors', 
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(orderData)
         });
@@ -442,7 +442,7 @@ const OrderForm = () => {
       setSuccess(true);
       setSubmitting(false);
 
-      // 4. Redirect to WhatsApp
+      // 4. Redirect to WhatsApp (Merchant side for order notification)
       window.open(`https://wa.me/${MERCHANT_WHATSAPP}?text=${message}`, '_blank');
       
     } catch (error) {
@@ -475,10 +475,10 @@ const OrderForm = () => {
             <p className="text-sm text-slate-500">Total Amount: AED {qty * price}</p>
           </div>
           <Button 
-            onClick={() => window.open(`https://wa.me/${MERCHANT_WHATSAPP}`, '_blank')}
+            onClick={() => window.open(`https://wa.me/${SUPPORT_WHATSAPP}`, '_blank')}
             className="bg-green-600 hover:bg-green-700 shadow-green-200 border-none"
           >
-            <MessageCircle className="w-5 h-5 mr-2" /> Chat on WhatsApp
+            <MessageCircle className="w-5 h-5 mr-2" /> Chat for Support
           </Button>
         </div>
       </section>
@@ -699,7 +699,9 @@ const Footer = ({
           <h4 className="font-bold uppercase tracking-wider text-sm text-slate-200">Company</h4>
           <p className="text-slate-400 text-sm">Authorized partner store specializing in premium home comfort solutions across UAE.</p>
           <div className="flex justify-center md:justify-start">
-            <Badge icon={MessageCircle} text="WhatsApp Support" />
+            <a href={`https://wa.me/${SUPPORT_WHATSAPP}`} target="_blank" rel="noopener noreferrer" className="hover:scale-105 transition-transform active:scale-95">
+              <Badge icon={MessageCircle} text="WhatsApp Support" />
+            </a>
           </div>
         </div>
       </div>
@@ -744,7 +746,7 @@ const StickyCTA = () => {
 
 const WhatsAppButton = () => (
   <a 
-    href={`https://wa.me/${MERCHANT_WHATSAPP}`} 
+    href={`https://wa.me/${SUPPORT_WHATSAPP}`} 
     target="_blank" 
     rel="noopener noreferrer"
     className="fixed bottom-24 right-6 z-50 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition-all hover:scale-110 active:scale-90"
@@ -949,7 +951,7 @@ export default function App() {
                 <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center group-hover:bg-red-50 transition-colors">
                   <Phone className="w-5 h-5 text-red-600" />
                 </div>
-                <a href="tel:+971568472271" className="font-semibold hover:text-red-600 transition-colors">+971 56 847 2271</a>
+                <a href={`tel:+${SUPPORT_WHATSAPP}`} className="font-semibold hover:text-red-600 transition-colors">+971 56 847 2271</a>
               </div>
               <div className="flex items-center gap-3 text-slate-700 group">
                 <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center group-hover:bg-red-50 transition-colors">
