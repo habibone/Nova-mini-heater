@@ -29,8 +29,8 @@ import {
 import { UAE_CITIES } from './types';
 
 // --- CONFIGURATION ---
-// Updated to the latest Google Apps Script URL provided by the user
-const GOOGLE_SHEET_URL: string = "https://script.google.com/macros/s/AKfycbz8l58isRURQvKqB1pkfOhIvmr-_kluf9RzMG2LxUzuhk5HTiNtKUQTUdaT45ygvu5_/exec"; 
+// Latest URL provided by the user
+const GOOGLE_SHEET_URL: string = "https://script.google.com/macros/s/AKfycbw0xNF3FXeNl_E5OX2noMAdMcxsstDMegJXiumtZpKiiv1pf3noYWaGVUlT2VKr0Atb/exec"; 
 const MERCHANT_WHATSAPP = "923703730897"; // For order fulfillment
 const SUPPORT_WHATSAPP = "971568472271"; // For general support in footer
 
@@ -428,9 +428,16 @@ const OrderForm = () => {
 
     const newOrderNo = `TP-${Date.now().toString().slice(-6)}`;
     setOrderId(newOrderNo);
-    const date = new Date().toLocaleString('en-AE', { timeZone: 'Asia/Dubai' });
+    const date = new Date().toLocaleString('en-AE', { 
+      timeZone: 'Asia/Dubai',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
 
-    // Payload keys specifically mapped to the requested Google Sheet columns
+    // Match exact keys from your Google Apps Script requirement
     const sheetPayload = {
       "Date": date,
       "Order No": newOrderNo,
@@ -438,40 +445,34 @@ const OrderForm = () => {
       "Phone Number (UAE)": formData.phone,
       "Email": formData.email || "N/A",
       "City / Area": formData.city,
-      "Quantity": qty,
+      "Quantity": qty.toString(),
       "Delivery Address1": formData.address
     };
 
     try {
-      // We use a Promise.race with a timeout to ensure the UI doesn't hang if Google Sheets is slow
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Timeout')), 2500)
-      );
-
-      const fetchPromise = fetch(GOOGLE_SHEET_URL, {
+      // Use no-cors and plain text to ensure Google Script receives the data safely
+      // Some browsers block JSON content-type in no-cors mode, so we send it raw
+      await fetch(GOOGLE_SHEET_URL, {
         method: 'POST',
         mode: 'no-cors', 
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
         body: JSON.stringify(sheetPayload)
-      });
-
-      // Attempt to send to sheet but don't let it block the user for more than 2.5 seconds
-      await Promise.race([fetchPromise, timeoutPromise]).catch(err => {
-        console.warn("Sheet update slow or failed, proceeding to success state:", err);
       });
 
       // Prepare WhatsApp redirect
       const message = generateWhatsAppMessage(newOrderNo);
       
-      // Mark as success first so UI updates
       setSuccess(true);
       setSubmitting(false);
 
-      // Attempt immediate redirect (might be blocked by popup blocker after async await)
+      // Attempt immediate redirect
       window.open(`https://wa.me/${MERCHANT_WHATSAPP}?text=${message}`, '_blank');
       
     } catch (error) {
-      console.error("Submission process encountered an issue:", error);
+      console.error("Submission error:", error);
+      // Fail gracefully: show success anyway so they can still confirm via WhatsApp
       setSuccess(true);
       setSubmitting(false);
     }
@@ -494,12 +495,12 @@ const OrderForm = () => {
             <CheckCircle2 className="w-12 h-12" />
           </div>
           <h2 className="text-3xl font-bold">Order Received!</h2>
-          <p className="text-lg text-slate-600">Your order details have been saved. To ensure priority delivery, please click the button below to confirm your order via WhatsApp.</p>
+          <p className="text-lg text-slate-600">Your order details have been saved in our system. To ensure fast delivery, please confirm your order on WhatsApp below.</p>
           
           <div className="bg-white p-6 rounded-2xl border border-green-100 shadow-sm text-left">
-            <p className="text-sm text-slate-500 font-bold mb-2">Order ID: {orderId}</p>
+            <p className="text-sm text-slate-500 font-bold mb-2">Reference: {orderId}</p>
             <p className="text-sm text-slate-700"><strong>Customer:</strong> {formData.name}</p>
-            <p className="text-sm text-slate-700"><strong>Total:</strong> AED {qty * price}</p>
+            <p className="text-sm text-slate-700"><strong>Total Amount:</strong> AED {qty * price} (COD)</p>
           </div>
 
           <Button 
@@ -509,7 +510,7 @@ const OrderForm = () => {
             <MessageCircle className="w-6 h-6 mr-2" /> Confirm via WhatsApp
           </Button>
 
-          <p className="text-xs text-slate-400">If the link doesn't open, please check your popup blocker or contact support.</p>
+          <p className="text-xs text-slate-400">If WhatsApp doesn't open automatically, please click the button above.</p>
         </div>
       </section>
     );
