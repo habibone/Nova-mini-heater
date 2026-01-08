@@ -451,7 +451,9 @@ const OrderForm = () => {
       "Date": date,
       "Order No": newOrderNo,
       "Full Name": formData.name,
-      "Phone Number (UAE)": formData.phone,
+      // CRITICAL: We prefix the phone with a single quote ' to force Google Sheets 
+      // to treat the value as plain text and not a formula (which causes #ERROR! due to the +)
+      "Phone Number (UAE)": `'${formData.phone}`,
       "Email": formData.email || "N/A",
       "City / Area": formData.city,
       "Quantity": qty.toString(),
@@ -537,7 +539,6 @@ const OrderForm = () => {
                 <span className="text-xl line-through opacity-70">AED {originalPrice}</span>
               </div>
               <div className="bg-white/20 p-3 rounded-xl flex items-center justify-center md:justify-start gap-2">
-                <Timer className="w-5 h-5 animate-pulse" />
                 <span className="font-bold text-sm">Hurry! Offer ends very soon</span>
               </div>
             </div>
