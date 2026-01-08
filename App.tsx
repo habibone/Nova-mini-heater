@@ -29,7 +29,7 @@ import {
 import { UAE_CITIES } from './types';
 
 // --- CONFIGURATION ---
-const GOOGLE_SHEET_URL: string = "https://script.google.com/macros/s/AKfycbwNhKOUGdQKIraYpsoXig6SMYOAIez4_PqC7BM0Y_JDu5cDaRqmZvpTfWvwkkNQkap_/exec"; 
+const GOOGLE_SHEET_URL: string = "https://script.google.com/macros/s/AKfycbzuJjwHirbLvkbzry1Qq5alO1sinpU_R-sYDdOYKLVEz-rU9oq_ypBDMlfxmV8u7TCi/exec"; 
 const MERCHANT_WHATSAPP = "923703730897"; // For order fulfillment
 const SUPPORT_WHATSAPP = "971568472271"; // For general support in footer
 
@@ -417,7 +417,7 @@ const OrderForm = () => {
     };
 
     try {
-      // 1. Send to Google Sheets (Optional but recommended for records)
+      // 1. Send to Google Sheets
       if (GOOGLE_SHEET_URL) {
         await fetch(GOOGLE_SHEET_URL, {
           method: 'POST',
