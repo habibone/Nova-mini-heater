@@ -742,7 +742,7 @@ const Footer = ({
         </div>
       </div>
       <div className="mt-16 pt-8 border-t border-slate-800 text-center text-slate-500 text-xs">
-        &copy; {new Date().getFullYear()} ThermoPro UAE Official Store. All rights reserved.
+        &copy; {new Date().getFullYear()} ThermoPro. All rights reserved.
       </div>
     </div>
   </footer>
