@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Truck, 
@@ -389,6 +390,7 @@ const OrderForm = () => {
   const [qty, setQty] = useState(1);
   const [formData, setFormData] = useState({ 
     name: '', 
+    email: '',
     phone: '+971 ', 
     city: UAE_CITIES.DUBAI, 
     address: '' 
@@ -409,11 +411,19 @@ const OrderForm = () => {
 
     setSubmitting(true);
 
-    const orderData = {
-      ...formData,
-      qty,
-      total: qty * price,
-      product: "ThermoPro Fan Heater 2000W"
+    const orderNo = `TP-${Date.now().toString().slice(-6)}`;
+    const date = new Date().toLocaleString('en-AE', { timeZone: 'Asia/Dubai' });
+
+    // Payload keys specifically mapped to the requested Google Sheet columns
+    const sheetPayload = {
+      "Date": date,
+      "Order No": orderNo,
+      "Full Name": formData.name,
+      "Phone Number (UAE)": formData.phone,
+      "Email": formData.email || "N/A",
+      "City / Area": formData.city,
+      "Quantity": qty,
+      "Delivery Address1": formData.address
     };
 
     try {
@@ -423,19 +433,21 @@ const OrderForm = () => {
           method: 'POST',
           mode: 'no-cors', 
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(orderData)
+          body: JSON.stringify(sheetPayload)
         });
       }
 
       // 2. Prepare WhatsApp message
       const message = `*NEW ORDER FROM FUNNEL*%0A%0A` +
-        `*Product:* ${orderData.product}%0A` +
-        `*Name:* ${orderData.name}%0A` +
-        `*Phone:* ${orderData.phone}%0A` +
-        `*City:* ${orderData.city}%0A` +
-        `*Address:* ${orderData.address}%0A` +
-        `*Quantity:* ${orderData.qty}%0A` +
-        `*Total:* AED ${orderData.total}%0A%0A` +
+        `*Order ID:* ${orderNo}%0A` +
+        `*Product:* ThermoPro Fan Heater 2000W%0A` +
+        `*Name:* ${formData.name}%0A` +
+        `*Email:* ${formData.email || 'N/A'}%0A` +
+        `*Phone:* ${formData.phone}%0A` +
+        `*City:* ${formData.city}%0A` +
+        `*Address:* ${formData.address}%0A` +
+        `*Quantity:* ${qty}%0A` +
+        `*Total:* AED ${qty * price}%0A%0A` +
         `Please confirm my delivery!`;
 
       // 3. Success UI
@@ -534,6 +546,17 @@ const OrderForm = () => {
                   className="w-full px-5 py-4 rounded-xl border border-gray-200 bg-white text-slate-900 focus:border-red-600 focus:ring-4 focus:ring-red-50 outline-none transition-all placeholder:text-gray-400 shadow-sm"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-slate-700">Email Address</label>
+                <input 
+                  type="email" 
+                  placeholder="Enter your email (optional)" 
+                  className="w-full px-5 py-4 rounded-xl border border-gray-200 bg-white text-slate-900 focus:border-red-600 focus:ring-4 focus:ring-red-50 outline-none transition-all placeholder:text-gray-400 shadow-sm"
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
                 />
               </div>
 
