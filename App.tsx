@@ -107,7 +107,7 @@ const Hero = () => {
               One Heater for <span className="text-red-600">Every Season</span> – Cool, Warm & Hot Air
             </h1>
             <p className="text-lg md:text-xl text-slate-600 leading-relaxed max-xl">
-              ThermoPro Fan Heater delivers fast warmth in winter and refreshing airflow in warmer months — compact, powerful, and easy to use.
+              The Nova - Fan Heater delivers fast warmth in winter and refreshing airflow in warmer months — compact, powerful, and easy to use.
             </p>
             
             <div className="flex flex-wrap justify-center md:justify-start gap-3">
@@ -125,7 +125,7 @@ const Hero = () => {
             <div className="relative z-10 animate-float">
               <img 
                 src="https://images.localbossmarketing.com/wp-content/uploads/2026/01/nova-fan-heater-216053.avif" 
-                alt="ThermoPro Fan Heater" 
+                alt="Nova Fan Heater" 
                 className="w-full h-auto rounded-3xl shadow-2xl border-4 border-white bg-white"
               />
               <div className="absolute -top-4 -right-4 bg-red-600 text-white p-4 rounded-2xl shadow-xl flex items-center gap-2 font-bold">
@@ -170,7 +170,7 @@ const ProblemSolution = () => (
             <CheckCircle2 className="w-8 h-8" />
           </div>
           <h3 className="text-2xl font-bold text-slate-900">The Ultimate Solution</h3>
-          <p className="text-lg text-red-600 font-semibold italic">“ThermoPro – One Device, Multiple Comfort Modes.”</p>
+          <p className="text-lg text-red-600 font-semibold italic">“Nova - Fan Heater – One Device, Multiple Comfort Modes.”</p>
           <p className="text-slate-600">
             A versatile, 2-in-1 device designed for the unique UAE climate. Stay cozy in the brief winter and stay refreshed throughout the rest of the year.
           </p>
@@ -195,7 +195,7 @@ const Benefits = () => {
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-16">
           <span className="text-red-600 font-bold tracking-widest uppercase text-xs mb-2 block">Premium Features</span>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">Why Everyone Loves ThermoPro</h2>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">Why Everyone Loves the Nova Fan Heater</h2>
           <div className="w-24 h-1.5 bg-gradient-to-r from-red-400 to-red-600 mx-auto rounded-full" />
         </div>
         
@@ -256,7 +256,7 @@ const VisualUsage = () => {
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">Comfort in Every Corner</h2>
-          <p className="text-slate-600 text-lg">Designed to fit seamlessly into your lifestyle and home.</p>
+          <p className="text-slate-600 text-lg">The Nova Fan Heater is designed to fit seamlessly into your lifestyle.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {usages.map((u, i) => (
@@ -311,8 +311,8 @@ const Comparison = () => {
     <section className="py-24 bg-slate-900 text-white overflow-hidden">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">Why ThermoPro is the <span className="text-red-500">Smart Choice</span></h2>
-          <p className="text-slate-400 text-lg">Compare ThermoPro with traditional methods and see the difference.</p>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">Why Nova is the <span className="text-red-500">Smart Choice</span></h2>
+          <p className="text-slate-400 text-lg">Compare Nova with traditional methods and see the difference.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -329,7 +329,7 @@ const Comparison = () => {
               <div className="bg-slate-700/50 w-full sm:w-px h-px sm:h-auto" />
 
               <div className="flex-1 p-6 space-y-4 bg-red-600/5">
-                <h4 className="text-xl font-bold text-red-500">ThermoPro Advantage</h4>
+                <h4 className="text-xl font-bold text-red-500">Nova Advantage</h4>
                 <div className="flex items-start gap-3 text-green-400 bg-green-400/10 p-4 rounded-2xl border border-green-400/20">
                   <CheckCircle2 className="w-6 h-6 shrink-0" />
                   <p className="text-sm font-medium">{item.good}</p>
@@ -402,9 +402,9 @@ const OrderForm = () => {
   const originalPrice = 266;
 
   const generateWhatsAppMessage = (id: string) => {
-    return `*NEW ORDER FROM FUNNEL*%0A%0A` +
+    return `*NEW ORDER FROM THERMOPRO*%0A%0A` +
       `*Order ID:* ${id}%0A` +
-      `*Product:* ThermoPro Fan Heater 2000W%0A` +
+      `*Product:* Nova - Fan Heater 2000W%0A` +
       `*Name:* ${formData.name}%0A` +
       `*Email:* ${formData.email || 'N/A'}%0A` +
       `*Phone:* ${formData.phone}%0A` +
@@ -432,7 +432,7 @@ const OrderForm = () => {
 
     setSubmitting(true);
 
-    const newOrderNo = `TP-${Date.now().toString().slice(-6)}`;
+    const newOrderNo = `NV-${Date.now().toString().slice(-6)}`;
     setOrderId(newOrderNo);
     const date = new Date().toLocaleString('en-AE', { 
       timeZone: 'Asia/Dubai',
@@ -453,7 +453,8 @@ const OrderForm = () => {
       "Email": formData.email || "N/A",
       "City / Area": formData.city,
       "Quantity": qty.toString(),
-      "Delivery Address1": formData.address
+      "Delivery Address1": formData.address,
+      "Product": "Nova - Fan Heater"
     };
 
     try {
@@ -500,11 +501,12 @@ const OrderForm = () => {
             <CheckCircle2 className="w-12 h-12" />
           </div>
           <h2 className="text-3xl font-bold">Order Received!</h2>
-          <p className="text-lg text-slate-600">Your order details have been saved in our system. To ensure fast delivery, please confirm your order on WhatsApp below.</p>
+          <p className="text-lg text-slate-600">Your order details for the Nova Fan Heater have been saved. To ensure fast delivery, please confirm your order on WhatsApp below.</p>
           
           <div className="bg-white p-6 rounded-2xl border border-green-100 shadow-sm text-left">
             <p className="text-sm text-slate-500 font-bold mb-2">Reference: {orderId}</p>
             <p className="text-sm text-slate-700"><strong>Customer:</strong> {formData.name}</p>
+            <p className="text-sm text-slate-700"><strong>Product:</strong> Nova - Fan Heater</p>
             <p className="text-sm text-slate-700"><strong>Total Amount:</strong> AED {qty * price} (COD)</p>
           </div>
 
@@ -527,7 +529,7 @@ const OrderForm = () => {
         <div className="grid md:grid-cols-2 gap-12">
           <div className="space-y-8">
             <div className="bg-red-600 text-white p-8 rounded-3xl shadow-2xl shadow-red-200 transform md:-rotate-2 border-4 border-white">
-              <h3 className="text-2xl font-bold mb-2 text-center md:text-left">Special Offer</h3>
+              <h3 className="text-2xl font-bold mb-2 text-center md:text-left">Special Nova Offer</h3>
               <div className="flex items-baseline justify-center md:justify-start gap-4 mb-4">
                 <span className="text-xl line-through opacity-70">AED 266</span>
                 <span className="text-5xl font-black">AED 199</span>
@@ -556,7 +558,7 @@ const OrderForm = () => {
           <div className="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl border border-gray-100">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="text-center mb-6">
-                <h3 className="text-3xl font-extrabold text-slate-900 mb-1">Place Your Order</h3>
+                <h3 className="text-3xl font-extrabold text-slate-900 mb-1">Order Nova Fan Heater</h3>
                 <p className="text-slate-500 text-sm font-medium italic">UAE delivery in 24-48 hours</p>
               </div>
               
@@ -670,7 +672,7 @@ const OrderForm = () => {
 const Faq = () => {
   const faqs = [
     { q: "Is this safe to use at home?", a: "Yes, it features built-in overheat protection and an automatic shut-off system if it tips over." },
-    { q: "Can I use it as a fan in summer?", a: "Absolutely! The ThermoPro Fan Heater has a dedicated 'Cool Air' mode for year-round utility." },
+    { q: "Can I use it as a fan in summer?", a: "Absolutely! The Nova Fan Heater has a dedicated 'Cool Air' mode for year-round utility." },
     { q: "Does it make noise while sleeping?", a: "It is designed for low-noise operation, making it ideal for bedrooms and home offices." },
     { q: "How long does delivery take?", a: "We deliver within 1-2 working days across the UAE (Dubai, Abu Dhabi, Sharjah, etc.)." },
     { q: "Is Cash on Delivery available?", a: "Yes, COD is available for all cities in the UAE. No advance payment required!" },
@@ -710,24 +712,42 @@ const Footer = ({
   onOpenRefund,
   onOpenPrivacy
 }: { 
-  onOpenShipping: () => void;
-  onOpenRefund: () => void;
-  onOpenPrivacy: () => void;
+  onOpenShipping: (e: React.MouseEvent) => void;
+  onOpenRefund: (e: React.MouseEvent) => void;
+  onOpenPrivacy: (e: React.MouseEvent) => void;
 }) => (
   <footer className="bg-slate-900 text-white py-16 border-t border-slate-800">
     <div className="container mx-auto px-4 max-w-6xl">
       <div className="grid md:grid-cols-3 gap-12 text-center md:text-left">
         <div className="space-y-4">
           <h3 className="text-2xl font-black italic tracking-tighter">THERMO<span className="text-red-600">PRO</span></h3>
-          <p className="text-slate-400">One compact heater. Multiple comfort modes. Everyday value for UAE homes.</p>
+          <p className="text-slate-400">Premium home solutions. Quality comfort, everyday value for UAE homes.</p>
         </div>
         <div className="space-y-4">
           <h4 className="font-bold uppercase tracking-wider text-sm text-slate-200">Policies & Support</h4>
           <ul className="text-slate-400 space-y-3 text-sm">
             <li className="flex flex-col items-center md:items-start gap-2">
-              <button onClick={onOpenShipping} className="text-red-500 font-bold hover:text-red-400 underline underline-offset-4 decoration-red-500/30 transition-colors text-left">Full Shipping Policy</button>
-              <button onClick={onOpenRefund} className="text-red-500 font-bold hover:text-red-400 underline underline-offset-4 decoration-red-500/30 transition-colors text-left">Refund & Replacement Policy</button>
-              <button onClick={onOpenPrivacy} className="text-red-500 font-bold hover:text-red-400 underline underline-offset-4 decoration-red-500/30 transition-colors text-left">Privacy Policy</button>
+              <button 
+                type="button"
+                onClick={onOpenShipping} 
+                className="text-red-500 font-bold hover:text-red-400 underline underline-offset-4 decoration-red-500/30 transition-colors text-left"
+              >
+                Full Shipping Policy
+              </button>
+              <button 
+                type="button"
+                onClick={onOpenRefund} 
+                className="text-red-500 font-bold hover:text-red-400 underline underline-offset-4 decoration-red-500/30 transition-colors text-left"
+              >
+                Refund & Replacement Policy
+              </button>
+              <button 
+                type="button"
+                onClick={onOpenPrivacy} 
+                className="text-red-500 font-bold hover:text-red-400 underline underline-offset-4 decoration-red-500/30 transition-colors text-left"
+              >
+                Privacy Policy
+              </button>
             </li>
           </ul>
         </div>
@@ -763,7 +783,7 @@ const StickyCTA = () => {
            <p className="text-xs text-slate-400 line-through">AED 266</p>
            <p className="text-lg font-bold text-red-600">AED 199</p>
         </div>
-        <Button onClick={() => document.getElementById('order-form')?.scrollIntoView({ behavior: 'smooth' })} className="py-3 text-base shadow-red-500/20 bg-red-600 hover:bg-red-700">🔥 ORDER NOW (AED 199)</Button>
+        <Button onClick={() => document.getElementById('order-form')?.scrollIntoView({ behavior: 'smooth' })} className="py-3 text-base shadow-red-500/20 bg-red-600 hover:bg-red-700">🔥 ORDER NOVA NOW (AED 199)</Button>
       </div>
     </div>
   );
@@ -773,6 +793,21 @@ export default function App() {
   const [isShippingOpen, setIsShippingOpen] = useState(false);
   const [isRefundOpen, setIsRefundOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+
+  const toggleShipping = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    setIsShippingOpen(prev => !prev);
+  };
+
+  const toggleRefund = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    setIsRefundOpen(prev => !prev);
+  };
+
+  const togglePrivacy = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    setIsPrivacyOpen(prev => !prev);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -786,34 +821,195 @@ export default function App() {
       <Faq />
       <section className="py-20 bg-red-600 text-white text-center">
         <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="text-3xl md:text-4xl font-bold mb-10 leading-tight uppercase tracking-tight">One compact heater. Multiple comfort modes. Everyday value.</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-10 leading-tight uppercase tracking-tight">One compact heater. Multiple comfort modes. Everyday value with Nova.</h2>
           <div className="flex justify-center">
-            <Button className="bg-white text-red-600 hover:bg-slate-900 hover:text-white max-w-sm border-none shadow-2xl py-6 text-xl scale-100 hover:scale-105" onClick={() => document.getElementById('order-form')?.scrollIntoView({ behavior: 'smooth' })}>🔥 Order ThermoPro Fan Heater Now</Button>
+            <Button className="bg-white text-red-600 hover:bg-slate-900 hover:text-white max-w-sm border-none shadow-2xl py-6 text-xl scale-100 hover:scale-105" onClick={() => document.getElementById('order-form')?.scrollIntoView({ behavior: 'smooth' })}>🔥 Order Nova - Fan Heater Now</Button>
           </div>
         </div>
       </section>
-      <Footer onOpenShipping={() => setIsShippingOpen(true)} onOpenRefund={() => setIsRefundOpen(true)} onOpenPrivacy={() => setIsPrivacyOpen(true)} />
+      <Footer 
+        onOpenShipping={toggleShipping} 
+        onOpenRefund={toggleRefund} 
+        onOpenPrivacy={togglePrivacy} 
+      />
       <StickyCTA />
+      
       <Modal isOpen={isShippingOpen} onClose={() => setIsShippingOpen(false)} title="Shipping Policy – THERMOPRO">
-        <div className="space-y-6">
-          <p className="font-semibold text-slate-900">THERMOPRO is committed to delivering your orders quickly and safely.</p>
-          <div className="space-y-3"><h4 className="font-bold text-slate-800">1. Delivery Areas</h4><p>We deliver across: <strong>United Arab Emirates (UAE)</strong></p></div>
-          <div className="space-y-3"><h4 className="font-bold text-slate-800">2. Delivery Time</h4><ul className="list-disc pl-5"><li>Standard: 2–5 days</li><li>Remote: 3–7 days</li></ul></div>
-          <div className="space-y-3"><h4 className="font-bold text-slate-800">3. Cash on Delivery (COD)</h4><p>We offer COD service across UAE for customer convenience.</p></div>
+        <div className="space-y-6 text-slate-600">
+          <p className="font-semibold text-slate-900">THERMOPRO (MyZambeel, authorized partner store) is committed to delivering your orders quickly and safely.</p>
+          
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Delivery Areas</h4>
+            <p>We currently deliver across:</p>
+            <ul className="list-disc pl-5">
+              <li><strong>United Arab Emirates (UAE)</strong></li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Delivery Time</h4>
+            <ul className="list-disc pl-5">
+              <li>Standard Delivery: <strong>2–5 working days</strong></li>
+              <li>Remote Areas: <strong>3–7 working days</strong></li>
+            </ul>
+            <p className="text-sm italic">Delivery timelines may vary due to weather, public holidays, or courier delays.</p>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Shipping Charges</h4>
+            <ul className="list-disc pl-5">
+              <li>Shipping charges (if any) are displayed at checkout.</li>
+              <li>The Nova Fan Heater qualifies for <strong>Free Delivery</strong> as mentioned on the product page.</li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Order Processing</h4>
+            <p>Orders are processed within <strong>24–48 hours</strong> after confirmation.</p>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Cash on Delivery (COD)</h4>
+            <p>We offer Cash on Delivery service across UAE for customer convenience.</p>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Delivery Attempts</h4>
+            <p>If the customer is unavailable:</p>
+            <ul className="list-disc pl-5">
+              <li>The courier will attempt re-delivery.</li>
+              <li>After multiple failed attempts, the order may be cancelled.</li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Incorrect Address</h4>
+            <p>THERMOPRO is not responsible for delays or failed deliveries due to incorrect address details provided by the customer.</p>
+          </div>
         </div>
       </Modal>
+
       <Modal isOpen={isRefundOpen} onClose={() => setIsRefundOpen(false)} title="Refund & Replacement Policy">
         <div className="space-y-6">
-          <p className="font-semibold text-slate-900">We offer refunds and replacements under the following conditions:</p>
-          <div className="space-y-3"><h4 className="font-bold text-slate-800">1. Eligibility</h4><ul className="list-disc pl-5"><li>Damaged product</li><li>Wrong item</li><li>Manufacturing defect</li></ul><p className="text-sm font-bold text-red-600">Report within 48 hours with photos/videos.</p></div>
-          <div className="pt-6 border-t border-gray-100"><p className="font-bold">Contact:</p><p>zambeelsupport@myzambeel.com</p></div>
+          <p className="font-semibold text-slate-900">At THERMOPRO, customer satisfaction is our priority. We offer refunds and replacements under the following conditions:</p>
+          
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Eligibility for Replacement</h4>
+            <p>You are eligible for a replacement if:</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>The product is damaged upon delivery</li>
+              <li>The wrong item was delivered</li>
+              <li>The product has a manufacturing defect</li>
+            </ul>
+            <p className="text-sm font-bold text-red-600">You must report the issue within 48 hours of receiving the product with clear photos or videos.</p>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Replacement Process</h4>
+            <p>Once your claim is approved:</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>We will arrange a replacement at no extra cost</li>
+              <li>The damaged/incorrect product may be collected by our courier partner</li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Refund Policy</h4>
+            <p>Refunds are only issued if:</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Replacement is not possible</li>
+              <li>The product is out of stock</li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Non-Refundable Items</h4>
+            <p>Refunds/replacements are not applicable for:</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Damage caused by misuse or mishandling</li>
+              <li>Normal wear and tear</li>
+              <li>Change of mind after use</li>
+            </ul>
+          </div>
+
+          <div className="pt-6 border-t border-gray-100">
+            <p className="font-bold">To request a refund or replacement, contact:</p>
+            <p>zambeelsupport@myzambeel.com</p>
+            <p>+971 56 847 2271</p>
+            <a href="https://www.myzambeel.com/" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline">www.myzambeel.com</a>
+          </div>
         </div>
       </Modal>
+
       <Modal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} title="Privacy Policy – THERMOPRO">
         <div className="space-y-6">
-          <p className="font-semibold text-slate-900">We respect your privacy and protect your personal information.</p>
-          <div className="space-y-3"><h4 className="font-bold text-slate-800">1. Information We Collect</h4><p>We collect your name, phone, email, and address to process your order.</p></div>
-          <div className="space-y-3"><h4 className="font-bold text-slate-800">2. Data Security</h4><p>Your data is encrypted and only shared with fulfillment partners.</p></div>
+          <p className="font-semibold text-slate-900">At THERMOPRO, we respect your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and safeguard your data when you visit or make a purchase from our website.</p>
+          
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Information We Collect</h4>
+            <p>When you place an order or interact with our website, we may collect:</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Full name</li>
+              <li>Phone number</li>
+              <li>Email address</li>
+              <li>Shipping address</li>
+              <li>Billing details</li>
+              <li>Device & browser information</li>
+              <li>IP address</li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">How We Use Your Information</h4>
+            <p>We use your information to:</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Process and deliver your orders</li>
+              <li>Contact you regarding your order status</li>
+              <li>Provide customer support</li>
+              <li>Improve our website and services</li>
+              <li>Send order confirmations and important updates</li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Data Protection</h4>
+            <p>We implement strict security measures to protect your personal data against unauthorized access, misuse, or disclosure. Your information is only shared with trusted partners involved in order fulfillment and delivery.</p>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Sharing of Information</h4>
+            <p>We do not sell or rent your personal data. Information may only be shared with:</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Delivery partners</li>
+              <li>Payment processors</li>
+              <li>Legal authorities (if required by law)</li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Cookies</h4>
+            <p>Our website uses cookies to enhance your browsing experience, analyze traffic, and personalize content.</p>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Your Rights</h4>
+            <p>You have the right to:</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Request access to your data</li>
+              <li>Request correction or deletion of your data</li>
+              <li>Withdraw consent at any time</li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-slate-800">Policy Updates</h4>
+            <p>THERMOPRO reserves the right to update this Privacy Policy at any time. Changes will be posted on this page.</p>
+          </div>
+
+          <div className="pt-6 border-t border-gray-100">
+            <p className="font-bold">Contact Support:</p>
+            <p>support@localbossmarketing.com</p>
+          </div>
         </div>
       </Modal>
     </div>
